@@ -235,66 +235,70 @@ export const sendTransaction = async (
     includesFeePayer: boolean = false,
     block?: BlockhashAndFeeCalculator,
 ) => {
-  if (!wallet.publicKey) throw new WalletNotConnectedError();
+  try {
+    if (!wallet.publicKey) throw new WalletNotConnectedError();
 
-  let transaction: Transaction;
-  if (!Array.isArray(instructions)) {
-    transaction = instructions;
-  } else {
-    transaction = new Transaction();
-    instructions.forEach(instruction => transaction.add(instruction));
-    transaction.recentBlockhash = (
-        block || (await connection.getRecentBlockhash(commitment))
-    ).blockhash;
-
-    if (includesFeePayer) {
-      transaction.setSigners(...signers.map(s => s.publicKey));
+    let transaction: Transaction;
+    if (!Array.isArray(instructions)) {
+      transaction = instructions;
     } else {
-      transaction.setSigners(
-          // fee payed by the wallet owner
-          wallet.publicKey,
-          ...signers.map(s => s.publicKey),
+      transaction = new Transaction();
+      instructions.forEach(instruction => transaction.add(instruction));
+      transaction.recentBlockhash = (
+          block || (await connection.getRecentBlockhash(commitment))
+      ).blockhash;
+
+      if (includesFeePayer) {
+        transaction.setSigners(...signers.map(s => s.publicKey));
+      } else {
+        transaction.setSigners(
+            // fee payed by the wallet owner
+            wallet.publicKey,
+            ...signers.map(s => s.publicKey),
+        );
+      }
+
+      if (signers.length > 0) {
+        transaction.partialSign(...signers);
+      }
+      if (!includesFeePayer) {
+        transaction = await wallet.signTransaction(transaction);
+      }
+    }
+
+    const rawTransaction = transaction.serialize();
+    let options = {
+      skipPreflight: true,
+      commitment,
+    };
+
+    const txid = await connection.sendRawTransaction(rawTransaction, options);
+    let slot = 0;
+
+    if (awaitConfirmation) {
+      const confirmation = await awaitTransactionSignatureConfirmation(
+          txid,
+          DEFAULT_TIMEOUT,
+          connection,
+          commitment,
       );
+
+      if (!confirmation)
+        throw new Error('Timed out awaiting confirmation on transaction');
+      slot = confirmation?.slot || 0;
+
+      if (confirmation?.err) {
+        const errors = await getErrorForTransaction(connection, txid);
+
+        console.log(errors);
+        throw new Error(`Raw transaction ${txid} failed`);
+      }
     }
 
-    if (signers.length > 0) {
-      transaction.partialSign(...signers);
-    }
-    if (!includesFeePayer) {
-      transaction = await wallet.signTransaction(transaction);
-    }
+    return { txid, slot };
+  } catch(error) {
+    console.log(error)
   }
-
-  const rawTransaction = transaction.serialize();
-  let options = {
-    skipPreflight: true,
-    commitment,
-  };
-
-  const txid = await connection.sendRawTransaction(rawTransaction, options);
-  let slot = 0;
-
-  if (awaitConfirmation) {
-    const confirmation = await awaitTransactionSignatureConfirmation(
-        txid,
-        DEFAULT_TIMEOUT,
-        connection,
-        commitment,
-    );
-
-    if (!confirmation)
-      throw new Error('Timed out awaiting confirmation on transaction');
-    slot = confirmation?.slot || 0;
-
-    if (confirmation?.err) {
-      const errors = await getErrorForTransaction(connection, txid);
-
-      console.log(errors);
-      throw new Error(`Raw transaction ${txid} failed`);
-    }
-  }
-
-  return { txid, slot };
 };
 
 export const sendTransactionWithRetry = async (

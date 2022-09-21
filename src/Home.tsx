@@ -10,7 +10,8 @@ import {
     LAMPORTS_PER_SOL,
     ConfirmOptions,
     SYSVAR_RENT_PUBKEY,
-    Keypair
+    Keypair,
+    TransactionInstruction
 } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, Token, AccountLayout, NATIVE_MINT} from "@solana/spl-token";
 import {WalletAdapterNetwork} from '@solana/wallet-adapter-base';
@@ -503,7 +504,8 @@ const Home = (props: HomeProps) => {
         afterTransactions: Transaction[] = []
     ) => {
         try {
-            if (wallet.connected && candyMachine?.program && wallet.publicKey) {
+            console.log("minf function")
+            if (wallet.connected && wallet.publicKey) {
                 setIsMinting(true);
                 // let setupMint: SetupState | undefined;
                 // if (needTxnSplit && setupTxn === undefined) {
@@ -603,14 +605,14 @@ const Home = (props: HomeProps) => {
                 let provider = new anchor.Provider(props.connection, wallet as any, confirmOption);
                 let program = new anchor.Program(idl, props.programId!, provider);
 
-                let transaction = new Transaction();
+                let instructions:TransactionInstruction[] = [];
 
                 let mint = Keypair.generate();
                 let [metadata, ] = await anchor.web3.PublicKey.findProgramAddress([Buffer.from("metadata"), TOKEN_METADATA_PROGRAM_ID.toBuffer(), mint.publicKey.toBuffer()], TOKEN_METADATA_PROGRAM_ID);
                 let [tokenAccount, ] = await anchor.web3.PublicKey.findProgramAddress([wallet.publicKey.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.publicKey.toBuffer()], ASSOCIATED_TOKEN_PROGRAM_ID);
                 let [masterEdition, ] = await anchor.web3.PublicKey.findProgramAddress([Buffer.from("metadata"), TOKEN_METADATA_PROGRAM_ID.toBuffer(), mint.publicKey.toBuffer(), Buffer.from("edition")], TOKEN_METADATA_PROGRAM_ID);
                 
-                transaction.add(
+                instructions.push(
                     program.instruction.mint(
                         metadataTitle,
                         metadataSymbol,
@@ -632,32 +634,35 @@ const Home = (props: HomeProps) => {
                     )
                 )
 
-                await sendTransaction(props.connection, wallet, transaction, [mint])
+                console.log(instructions)
+
+                await sendTransaction(props.connection, wallet, instructions, [mint])
             }
         } catch (error: any) {
-            let message = error.msg || 'Minting failed! Please try again!';
-            if (!error.msg) {
-                if (!error.message) {
-                    message = 'Transaction Timeout! Please try again.';
-                } else if (error.message.indexOf('0x138')) {
-                } else if (error.message.indexOf('0x137')) {
-                    message = `SOLD OUT!`;
-                } else if (error.message.indexOf('0x135')) {
-                    message = `Insufficient funds to mint. Please fund your wallet.`;
-                }
-            } else {
-                if (error.code === 311) {
-                    message = `SOLD OUT!`;
-                } else if (error.code === 312) {
-                    message = `Minting period hasn't started yet.`;
-                }
-            }
+            // let message = error.msg || 'Minting failed! Please try again!';
+            // if (!error.msg) {
+            //     if (!error.message) {
+            //         message = 'Transaction Timeout! Please try again.';
+            //     } else if (error.message.indexOf('0x138')) {
+            //     } else if (error.message.indexOf('0x137')) {
+            //         message = `SOLD OUT!`;
+            //     } else if (error.message.indexOf('0x135')) {
+            //         message = `Insufficient funds to mint. Please fund your wallet.`;
+            //     }
+            // } else {
+            //     if (error.code === 311) {
+            //         message = `SOLD OUT!`;
+            //     } else if (error.code === 312) {
+            //         message = `Minting period hasn't started yet.`;
+            //     }
+            // }
 
-            setAlertState({
-                open: true,
-                message,
-                severity: "error",
-            });
+            // setAlertState({
+            //     open: true,
+            //     message,
+            //     severity: "error",
+            // });
+            console.log(error)
         } finally {
             setIsMinting(false);
         }
