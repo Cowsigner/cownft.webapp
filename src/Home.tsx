@@ -504,7 +504,6 @@ const Home = (props: HomeProps) => {
         afterTransactions: Transaction[] = []
     ) => {
         try {
-            console.log("minf function")
             if (wallet.connected && wallet.publicKey) {
                 setIsMinting(true);
                 // let setupMint: SetupState | undefined;
@@ -634,9 +633,8 @@ const Home = (props: HomeProps) => {
                     )
                 )
 
-                console.log(instructions)
-
-                await sendTransaction(props.connection, wallet, instructions, [mint])
+                let result = await sendTransaction(props.connection, wallet, instructions, [mint])
+                console.log(result)
             }
         } catch (error: any) {
             // let message = error.msg || 'Minting failed! Please try again!';
