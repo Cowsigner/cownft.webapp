@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "public": "build",
+    "site": "dem0-cowsigner-nft",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "demo": "dem0-cowsigner-nft"
+  },
+  "targets": {
+    "cowsigner-5b613": {
+      "hosting": {
+        "demo": [
+          "dem0-cowsigner-nft"
+        ]
+      }
+    }
+  }
+}
