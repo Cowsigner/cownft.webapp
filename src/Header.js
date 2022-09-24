@@ -14,17 +14,16 @@ const Header = () => {
   <div className="flex items-center justify-between">
     <div className="flex items-center">
       <a href="/">
-        <div className="relative flex h-10 w-52 items-center flex-reverse font-bold">
+        <div className="relative flex h-10 items-center flex-reverse font-bold">
           <span className='flex items-center gap-2'>
-            
+            Powered by
             <img
               alt="MySeed Logo"
-              src="/images/logo.png"
+              src="/images/cowsigner-logo-white-transparent.png"
               decoding="async"
               data-nimg="fill"
-             className='h-12 w-12 inline'
+             className='h-20 inline'
             />
-            MYSEEDNFT
           </span>
         </div>
       </a>

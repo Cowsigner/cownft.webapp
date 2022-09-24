@@ -31,10 +31,10 @@ border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .bg {
-  background-image: url(./images/header.jpg);
+  background-image: url(./assets/bg-3.png);
   background-position: bottom;
   background-repeat: no-repeat;
-  background-size: cover;
+  /*background-size: cover;*/
 }
 
 

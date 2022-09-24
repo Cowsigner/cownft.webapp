@@ -7,9 +7,9 @@ import Hero from './Hero';
 const App = () => {
 
 	return (
-		<div className="min-h-screen text-white selection:bg-indigo-500 selection:text-white">
-    <Header/>
-    <Hero/>
+	<div className="min-h-screen text-white selection:bg-indigo-500 selection:text-white bg">
+		<Header/>
+		<Hero/>
 	</div>
 	);
 };
