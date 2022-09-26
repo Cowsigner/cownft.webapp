@@ -32,7 +32,7 @@ border: 1px solid rgba(255, 255, 255, 0.3);
 
 .bg {
   background-image: url(./assets/bg-3.png);
-  background-position: bottom;
+  /*background-position: bottom;*/
   background-repeat: no-repeat;
   /*background-size: cover;*/
 }
@@ -65,7 +65,7 @@ border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .mint-button {
-  background: -webkit-linear-gradient(left, #4e44ce, #35aee2);
+  background: -webkit-linear-gradient(right, #3d6081, #f4db78);
   background-size: 200% 200%;
   animation: gradient-animation 4s ease infinite;
   margin-left: 10px;
@@ -77,7 +77,7 @@ border: 1px solid rgba(255, 255, 255, 0.3);
     background-size: 200% 200%;
     animation: gradient-animation 4s ease infinite;
     margin-left: 10px;
-    box-shadow: 0 20px 25px -5px #f0f1f12b, 0 8px 10px -6px rgb(22 26 230 / 69%);
+    box-shadow: 0 20px 25px -5px #f0f1f12b, 0 8px 10px -6px rgb(244, 219, 120);
 }
 
 .rgb {
@@ -187,6 +187,23 @@ border: 1px solid rgba(255, 255, 255, 0.3);
 .menu-drop {
   -webkit-animation: menu-drop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   animation: menu-drop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.subtitle {
+  width: 300px;
+}
+
+/*.box-shadow {*/
+/*  background-color: #0000008a;*/
+/*  border-radius: 20px;*/
+/*  box-shadow: rgb(0 0 0 / 25%) 0px 0px 20px 20px, rgb(0 0 0 / 12%) -5px 4px 20px 8px, rgb(0 0 0 / 12%) 0px 0px 20px 20px, rgb(0 0 0 / 17%) 0px 0px 20px 20px, rgb(0 0 0 / 9%) 0px -1px 20px 20px;*/
+/*}*/
+.box-shadow {
+  /*box-shadow: rgb(70 52 75) 0px 0px 20px 20px, rgb(0 0 0 / 12%) -5px 4px 20px 8px, rgb(0 0 0 / 12%) 0px 0px 20px 20px, rgb(0 0 0 / 17%) 0px 0px 20px 20px, rgb(0 0 0 / 9%) 0px -1px 20px 20px;*/
+  /*background-color: #46344b;*/
+  /*border-radius: 20px;*/
+  /*padding: 10px;*/
+  color: #f4db78;
 }
 
 @-webkit-keyframes menu-drop {

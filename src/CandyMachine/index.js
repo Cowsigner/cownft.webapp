@@ -76,7 +76,7 @@ const CandyMachine = ({ walletAddress }) => {
 
     const additionalComputeBudgetInstruction =
         anchor.web3.ComputeBudgetProgram.requestUnits({
-          units: 400000,
+          units: 800000,
           additionalFee: 0,
         });
 
