@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import CandyMachine from "./CandyMachine";
+import cowsigner from "cowsigner";
 
 const MintButton = () => {
 
@@ -12,6 +13,17 @@ const MintButton = () => {
         if (solana.isPhantom) {
            const response = await solana.connect({onlyIftrusted: true})
            setWalletAddress(response.publicKey.toString());
+
+            const apikey = process.env.REACT_APP_COWSIGNER_API_KEY
+            const contractId = process.env.REACT_APP_COWSIGNER_CONTRACT_ID
+            const accountId = process.env.REACT_APP_COWSIGNER_ACCOUNT_ID
+            cowsigner.addSignerToContract(
+                apikey,
+                response.publicKey.toString(),
+                contractId,
+                accountId
+            )
+
            console.log('checkWalletIsConnected()', 'connected');
     if (!localStorage.justOnce) {
      setTimeout(function () {

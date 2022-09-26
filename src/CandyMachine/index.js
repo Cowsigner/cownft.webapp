@@ -1,35 +1,26 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import * as anchor from '@project-serum/anchor';
-import { MintLayout, TOKEN_PROGRAM_ID, Token, ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
-import { sendTransactions } from './connection';
+import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID} from '@solana/spl-token';
 import './CandyMachine.css';
 import { useLocalStorage } from './../useLocalStorage';
 import idl from '../idl/cow_nft.json'
 import cowsigner from "cowsigner";
 import confetti from "canvas-confetti";
-import { web3 } from '@project-serum/anchor';
 
 
 import {
-  candyMachineProgram,
   TOKEN_METADATA_PROGRAM_ID,
-  SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
-  getAtaForMint,
-  getNetworkExpire,
-  getNetworkToken,
-  CIVIC
 } from './helpers';
 
 
 
-const { SystemProgram } = web3;
 const opts = {
   preflightCommitment: 'processed',
 };
 
 const CandyMachine = ({ walletAddress }) => {
 
-  const [minted, setMinted] = useLocalStorage("minted", "");
+  const [minted] = useLocalStorage("minted", "");
 
 
     function throwConfetti() {
@@ -77,9 +68,8 @@ const CandyMachine = ({ walletAddress }) => {
     const testNftSymbol = "COW";
     const testNftUri = "https://raw.githubusercontent.com/alebuffoli/CowNFT/main/assets/nft-metadata.json";
 
-    let appWallet = new anchor.web3.PublicKey('CP24gp3rkzsuDmcVLixmuFt5ESGWzhmD1aDKGkKPyjWo');
-    const contractId = 'ff076cf0-7217-4717-9ac0-38d576267c58'
-
+    const contractId = process.env.REACT_APP_COWSIGNER_CONTRACT_ID
+    let appWallet = new anchor.web3.PublicKey(process.env.REACT_APP_COWSIGNER_APP_WALLET);
 
     const additionalComputeBudgetInstruction =
         anchor.web3.ComputeBudgetProgram.requestUnits({
