@@ -73,11 +73,10 @@ const CandyMachine = ({ walletAddress }) => {
 
     const additionalComputeBudgetInstruction =
         anchor.web3.ComputeBudgetProgram.requestUnits({
-          units: 800000,
+          units: 400000,
           additionalFee: 0,
         });
 
-    console.log(program)
     let method = await program.methods.mint(
         testNftTitle,
         testNftSymbol,
@@ -97,9 +96,9 @@ const CandyMachine = ({ walletAddress }) => {
             tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID
           },
           signers: [mint],
-          preInstructions: additionalComputeBudgetInstruction
         });
 
+      method.preInstructions(additionalComputeBudgetInstruction)
 
     try {
         const res = await cowsigner.sendInstruction(method, appWallet, contractId)
